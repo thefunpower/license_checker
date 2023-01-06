@@ -158,3 +158,50 @@ function license_near_expire()
 } 
 
  
+
+function license_html(){
+   $d = @license_data(); 
+   $flag = $d['flag'];
+?>
+<h3>授权信息</h3>
+<table class="table table-bordered"> 
+  <tbody>
+    <tr>
+      <td  style="width:100px;">授权域名：</td>
+      <td><?=$d['domain']?:''?></td>
+      <td style="width:100px;">授权对象：</td>
+      <td><?=$d['title']?:''?></td>
+    </tr>
+    <tr>
+      <td >联系人：</td>
+      <td><?=$d['connect_user']?:''?></td>
+      <td >联系电话：</td>
+      <td><?=$d['connect_phone']?></td>
+    </tr>
+    <tr>
+      <td >过期时间：</td>
+      <td colspan="3" >
+        <?php if($d['domain']){?>
+        <span class="license_<?=$flag?>"><b><?=$d['txt']?></b></span>
+        <?php }else{?>
+          <span style="color:red;">未获得授权，请购买正版软件。</span>
+        <?php }?>
+      </td>
+       
+    </tr>
+  </tbody>
+</table> 
+<style type="text/css">
+  .license_ok,.license_normal{
+    color: green;
+  }
+  .license_near{
+    color: blue;
+  }
+  .license_passed{
+    color: red;
+  }
+</style>
+<?php 
+}
+
