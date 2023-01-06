@@ -1,0 +1,21 @@
+{
+    "name": "thefunpower/license_checker",
+    "type": "library",
+    "description": "sample license_checker",
+    "keywords": ["php"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ken.sun",
+            "email": "kungfutime@foxmail.com" 
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    }, 
+    "autoload": { 
+        "files": [
+            "./license_checker.php" 
+        ]
+    }
+}
