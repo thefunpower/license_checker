@@ -79,7 +79,7 @@ function license_data($file = '')
     $obj        = new license; 
     $data       = file_get_contents($file);
     $private_key= file_get_contents($private_key_file); 
-    $data       = json_decode($obj->decode($data, $private_key));
+    $data       = json_decode($obj->decode($data, $private_key),true);
     license_data_parse($data); 
     if(function_exists('cache')){
         cache($cache_key,$last_change_time);
@@ -102,7 +102,7 @@ function license_data_parse(&$data)
         $less = 0;
     }
     $data['last_real_time'] = $less . '天'; 
-    if ($is_fover) {
+    if ($is_fover == 1) {
         $data['txt'] = "永久授权";
         $data['flag'] = 'ok';
         $data['last_real_time'] = "无限";
