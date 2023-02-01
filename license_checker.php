@@ -27,7 +27,7 @@ class license
     {
         $data = base64_decode($data);
         $this->rsa->loadKey($private_key);
-        return $this->rsa->decrypt($data);
+        return @$this->rsa->decrypt($data);
     }
 }
 /**
@@ -39,19 +39,14 @@ class license
  * @return void
  */
 function license_create($data, $file = null)
-{
-    if (!$data['title'] || !$data['company']) {
-        return false;
-    }
+{ 
     $data['last_time'] = date('Y-m-d 00:00:00', strtotime($data['last_time']));
     $d          = json_encode($data);
     $public_key = file_get_contents(PATH . '/data/public_key.txt');
     $obj        = new license;
-    $data       = $obj->encode($d, $public_key);
-    if (!$file) {
-        $file = PATH . '/data/license.crt';
-        file_put_contents($file, $data);
-    }
+    $data       = $obj->encode($d, $public_key); 
+    $file = $file?:PATH . '/data/license.crt';
+    file_put_contents($file, $data); 
     return $data;
 } 
 
@@ -62,8 +57,8 @@ function license_create($data, $file = null)
  * @return void
  */
 function license_data($file = '')
-{ 
-    $file = $file?:PATH . '/data/license.crt'; 
+{  
+    $file = $file?:PATH . 'data/license.crt'; 
     $last_change_time = filemtime($file);
     $cache_key = "license_checker_last_change_time";
     $cache_key1 = "license_checker_data";
@@ -73,44 +68,51 @@ function license_data($file = '')
         if($data && $license_file_cache_time == $last_change_time){ 
             return $data;
         }
-    }else{ 
-        static $data;
-        if ($keep && $data) {
-            return $data;
-        }
-        $obj            = new license; 
-        $data           = file_get_contents($file);
-        $private_key    = file_get_contents(PATH . '/data/private_key.txt');
-        try {
-            $data       = json_decode($obj->decode($data, $private_key), true);
-            license_data_parse($data); 
-            cache($cache_key,$last_change_time);
-            cache($cache_key1,$data);
-            return $data;
-        } catch (Exception $e) {
-        }
+    }   
+    if(!file_exists($file)){
+        die("授权文件license.crt不存在");
     }
+    $private_key_file = PATH . 'data/private_key.txt';
+    if(!file_exists($private_key_file)){
+        die("private_key.txt不存在");
+    }
+    $obj        = new license; 
+    $data       = file_get_contents($file);
+    $private_key= file_get_contents($private_key_file); 
+    $data       = json_decode($obj->decode($data, $private_key));
+    license_data_parse($data); 
+    if(function_exists('cache')){
+        cache($cache_key,$last_change_time);
+        cache($cache_key1,$data);
+    } 
+    return $data;
 }
  
 
 function license_data_parse(&$data)
-{
-    $less = ceil((strtotime($data['last_time']) - time()) / 86400);
+{ 
+    $is_fover = '';
+    $last_time = '';
+    if(isset($data['is_fover']))
+    $is_fover  = $data['is_fover'];
+    if(isset($data['last_time']))
+    $last_time = $data['last_time'];
+    $less = ceil((strtotime($last_time) - time()) / 86400);
     if ($less == 0) {
         $less = 0;
     }
-    $data['last_real_time'] = $less . '天';
-    if ($data['is_fover']) {
+    $data['last_real_time'] = $less . '天'; 
+    if ($is_fover) {
         $data['txt'] = "永久授权";
         $data['flag'] = 'ok';
         $data['last_real_time'] = "无限";
-    } else if ($data['last_time'] >= date('Y-m-d') && date('Y-m-d', time() + $time * 86400) > $data['last_time']) {
+    } else if ($last_time >= date('Y-m-d') && date('Y-m-d', time() + $time * 86400) > $last_time) {
         $data['txt'] = "即将过期,剩余" . $less . '天。';
         $data['flag'] = 'near';
-    } else if ($data['last_time'] >= date('Y-m-d')) {
+    } else if ($last_time >= date('Y-m-d')) {
         $data['txt'] = "正常,剩余" . $less . '天。';
         $data['flag'] = 'normal';
-    } else if ($data['last_time'] < date('Y-m-d')) {
+    } else if ($last_time < date('Y-m-d')) {
         $data['flag'] = 'passed';
         $data['txt'] = "已过期";
     }
