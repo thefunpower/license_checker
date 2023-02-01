@@ -61,17 +61,19 @@ function license_create($data, $file = null)
  * @author sun <sunkangchina@163.com>
  * @return void
  */
-function license_data()
+function license_data($file = '')
 { 
-    $file = PATH . '/data/license.crt'; 
+    $file = $file?:PATH . '/data/license.crt'; 
     $last_change_time = filemtime($file);
     $cache_key = "license_checker_last_change_time";
     $cache_key1 = "license_checker_data";
-    $license_file_cache_time = cache($cache_key);
-    $data = cache($cache_key1);
-    if($data && $license_file_cache_time == $last_change_time){ 
-        return $data;
-    }else{  
+    if(function_exists('cache')){
+        $license_file_cache_time = cache($cache_key);
+        $data = cache($cache_key1);
+        if($data && $license_file_cache_time == $last_change_time){ 
+            return $data;
+        }
+    }else{ 
         static $data;
         if ($keep && $data) {
             return $data;
