@@ -91,6 +91,7 @@ function license_data($file = '')
 
 function license_data_parse(&$data)
 { 
+    $time = 30;
     $is_fover = '';
     $last_time = '';
     if(isset($data['is_fover']))
