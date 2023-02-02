@@ -59,16 +59,6 @@ function license_create($data, $file = null)
 function license_data($file = '')
 {  
     $file = $file?:PATH . 'data/license.crt'; 
-    $last_change_time = filemtime($file);
-    $cache_key = "license_checker_last_change_time";
-    $cache_key1 = "license_checker_data";
-    if(function_exists('cache')){
-        $license_file_cache_time = cache($cache_key);
-        $data = cache($cache_key1);
-        if($data && $license_file_cache_time == $last_change_time){ 
-            return $data;
-        }
-    }   
     if(!file_exists($file)){
         die("授权文件license.crt不存在");
     }
@@ -76,12 +66,23 @@ function license_data($file = '')
     if(!file_exists($private_key_file)){
         die("private_key.txt不存在");
     }
+    $last_change_time = filemtime($file);
+    $cache_key  = "license:time";
+    $cache_key1 = "license:data";
+    if(function_exists('cache')){
+        $license_file_cache_time = cache($cache_key);
+        $data = cache($cache_key1);  
+        
+        if($data && $license_file_cache_time == $last_change_time){  
+            return $data;
+        }
+    }    
     $obj        = new license; 
     $data       = file_get_contents($file);
     $private_key= file_get_contents($private_key_file); 
     $data       = json_decode($obj->decode($data, $private_key),true);
     license_data_parse($data); 
-    if(function_exists('cache')){
+    if(function_exists('cache')){ ;
         cache($cache_key,$last_change_time);
         cache($cache_key1,$data);
     } 
@@ -160,12 +161,14 @@ function license_html(){
       <td style="width:100px;">授权对象：</td>
       <td><?=$d['title']?:''?></td>
     </tr>
+    <?php if($d['connect_user']){?>
     <tr>
       <td >联系人：</td>
       <td><?=$d['connect_user']?:''?></td>
       <td >联系电话：</td>
       <td><?=$d['connect_phone']?></td>
     </tr>
+    <?php }?>
     <tr>
       <td >过期时间：</td>
       <td colspan="3" >
