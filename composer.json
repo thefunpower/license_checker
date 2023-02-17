@@ -1,7 +1,7 @@
 {
     "name": "thefunpower/license_checker",
     "type": "library",
-    "description": "sample license_checker",
+    "description": "代码授权",
     "keywords": ["php"],
     "license": "MIT",
     "authors": [
