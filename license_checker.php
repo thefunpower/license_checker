@@ -60,11 +60,11 @@ function license_data($file = '')
 {  
     $file = $file?:PATH . 'data/license.crt'; 
     if(!file_exists($file)){
-        die("授权文件license.crt不存在");
+        return "授权异常，请正确配置";
     }
     $private_key_file = PATH . 'data/private_key.txt';
     if(!file_exists($private_key_file)){
-        die("private_key.txt不存在");
+        return "授权异常，请正确配置";
     }
     $last_change_time = filemtime($file);
     $cache_key  = "license:time";
@@ -195,4 +195,3 @@ function license_html(){
 </style>
 <?php 
 }
-
