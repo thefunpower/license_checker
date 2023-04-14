@@ -42,10 +42,10 @@ function license_create($data, $file = null)
 { 
     $data['last_time'] = date('Y-m-d 00:00:00', strtotime($data['last_time']));
     $d          = json_encode($data);
-    $public_key = file_get_contents(PATH . '/data/public_key.txt');
+    $public_key = file_get_contents(PATH . '/data/public_key.pem');
     $obj        = new license;
     $data       = $obj->encode($d, $public_key); 
-    $file = $file?:PATH . '/data/license.crt';
+    $file = $file?:PATH . '/data/license.pem';
     file_put_contents($file, $data); 
     return $data;
 } 
@@ -58,11 +58,11 @@ function license_create($data, $file = null)
  */
 function license_data($file = '')
 {  
-    $file = $file?:PATH . 'data/license.crt'; 
+    $file = $file?:PATH . 'data/license.pem'; 
     if(!file_exists($file)){
         return "授权异常，请正确配置";
     }
-    $private_key_file = PATH . 'data/private_key.txt';
+    $private_key_file = PATH . 'data/private_key.pem';
     if(!file_exists($private_key_file)){
         return "授权异常，请正确配置";
     }
