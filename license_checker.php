@@ -1,10 +1,7 @@
 <?php 
 /*
-    Copyright (c) 2021-2031, All rights reserved.
-    This is NOT a freeware
-    LICENSE: https://github.com/thefunpower/core/blob/main/LICENSE.md 
-    Connect Email: sunkangchina@163.com 
-    Code Vesion: v1.0.x 
+* Copyright (c) 2021-2031, All rights reserved.
+* MIT LICENSE
 */ 
 class license
 {
@@ -31,12 +28,7 @@ class license
     }
 }
 /**
- * 根据公钥生成文件
- *
- * @param array $data
- * @version 1.0.0
- * @author sun <sunkangchina@163.com>
- * @return void
+ * 根据公钥生成文件 
  */
 function license_create($data, $file = null)
 { 
@@ -51,10 +43,7 @@ function license_create($data, $file = null)
 } 
 
 /**
- * 获取授权信息
- * @version 1.0.0
- * @author sun <sunkangchina@163.com>
- * @return void
+ * 获取授权信息 
  */
 function license_data($file = '')
 {  
