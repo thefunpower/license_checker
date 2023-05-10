@@ -47,11 +47,11 @@ function license_create($data, $file = null)
  */
 function license_data($file = '')
 {  
-    $file = $file?:PATH . 'data/license.pem'; 
+    $file = $file?:PATH . '/data/license.pem'; 
     if(!file_exists($file)){
         return "授权异常，请正确配置";
     }
-    $private_key_file = PATH . 'data/private_key.pem';
+    $private_key_file = PATH . '/data/private_key.pem';
     if(!file_exists($private_key_file)){
         return "授权异常，请正确配置";
     }
