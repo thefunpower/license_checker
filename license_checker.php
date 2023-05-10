@@ -60,8 +60,7 @@ function license_data($file = '')
     $cache_key1 = "license:data";
     if(function_exists('cache')){
         $license_file_cache_time = cache($cache_key);
-        $data = cache($cache_key1);  
-        
+        $data = cache($cache_key1);          
         if($data && $license_file_cache_time == $last_change_time){  
             return $data;
         }
