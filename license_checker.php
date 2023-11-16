@@ -1,8 +1,4 @@
 <?php 
-/*
-* Copyright (c) 2021-2031, All rights reserved.
-* MIT LICENSE
-*/ 
 class license
 {
     public $rsa;
